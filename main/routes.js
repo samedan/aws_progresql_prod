@@ -1,19 +1,32 @@
 var express = require('express');
-var router = express.Router();
+// var router = express.Router();
+const Router = require('express-promise-router');
 var pool = require('./db');
+
+const router = new Router();
 
 /*
     POST ROUTES  
 */
-router.get('/api/get/allposts', (req, res, next) => {
-  pool.query(
-    'SELECT * FROM posts ORDER BY date_created DESC',
-    (q_err, q_res) => {
-      res.json(q_res.rows);
-      console.log(q_err);
-    }
-  );
+router.get('/api/get/allposts', async (req, res, next) => {
+  try {
+    const q_res = await pool.query(
+      'SELECT * FROM posts ORDER BY date_created DESC'
+    );
+    res.send(q_res.rows);
+  } catch (error) {
+    return next(error);
+  }
 });
+// router.get('/api/get/allposts', (req, res, next) => {
+//   pool.query(
+//     'SELECT * FROM posts ORDER BY date_created DESC',
+//     (q_err, q_res) => {
+//       res.json(q_res.rows);
+//       console.log(q_err);
+//     }
+//   );
+// });
 
 // router.post("/api/post/posttodb", (req, res, next) => {
 //   const values = [
