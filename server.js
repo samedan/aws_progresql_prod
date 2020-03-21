@@ -3,9 +3,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-
+var indexRouter = require('./app/routes/turorial.routes');
 var corsOptions = {
-  origin: 'http://localhost:8081'
+  // origin: 'http://localhost:5010'
+  origin: 'http://35.180.16.198'
 };
 
 app.use(cors(corsOptions));
@@ -24,14 +25,21 @@ db.sequelize.sync();
 // });
 
 // simple route
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to bezkoder application.' });
-});
+// app.get('/', (req, res) => {
+//   res.json({ message: 'Welcome to dan AWS Progresql application.' });
+// });
+if (true) {
+  app.use(express.static('build'));
+  app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+  });
+}
 
-require('./app/routes/turorial.routes')(app);
+app.use('/', indexRouter);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5010;
+// var port = normalizePort(process.env.PORT || '5010');
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
