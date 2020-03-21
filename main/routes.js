@@ -8,15 +8,24 @@ const router = new Router();
 /*
     POST ROUTES  
 */
-router.get('/api/get/allposts', async (req, res, next) => {
-  try {
-    const q_res = await pool.query(
-      'SELECT * FROM posts ORDER BY date_created DESC'
-    );
-    res.send(q_res.rows);
-  } catch (error) {
-    return next(error);
-  }
+// router.get('/api/get/allposts', async (req, res) {
+//   const findAllQuery = 'SELECT * FROM posts';
+//   try {
+//     const { rows, rowCount } = await pool.query(findAllQuery);
+//     return res.status(200).send({ rows, rowCount });
+//   } catch(error) {
+//     return res.status(400).send(error);
+//   }
+// });
+router.get('/api/get/allposts', (req, res, next) => {
+  pool.query(
+    'SELECT * FROM posts ORDER BY date_created DESC',
+
+    (q_err, q_res) => {
+      if (q_err) return next(q_err);
+      res.json(q_res.rows);
+    }
+  );
 });
 // router.get('/api/get/allposts', (req, res, next) => {
 //   pool.query(
