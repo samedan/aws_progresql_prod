@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// if (process.env.NODE_ENV === 'production') {
 if (true) {
   app.use(express.static('build'));
   app.get('/*', (req, res) => {
@@ -27,7 +28,6 @@ app.use('/', indexRouter);
  * Module dependencies.
  */
 
-// var debug = require('debug')('server:server');
 var http = require('http');
 
 /**
@@ -104,3 +104,5 @@ function onListening() {
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+module.exports = app;
